@@ -1,0 +1,42 @@
+{
+  "id": "vpn-forticlient",
+  "type": "addon",
+  "name": "VPN FortiClient",
+  "description": "Adds FortiClient VPN connections to Network, with OTP codes and client certificates",
+  "icon": "verified_user",
+  "version": "0.4.1",
+  "apiVersion": 1,
+  "system": {
+    "install": "system/install.sh",
+    "uninstall": "system/uninstall.sh",
+    "check": "system/check.sh"
+  },
+  "contributes": {
+    "service": "Service.qml",
+    "settings": "Settings.qml",
+    "vpnProviderType": {
+      "name": "FortiClient",
+      "icon": "verified_user",
+      "editor": "ProviderEditor.qml",
+      "importer": "ImportRow.qml"
+    },
+    "statusIcons": [
+      {
+        "id": "vpn",
+        "component": "StatusIcon.qml"
+      }
+    ],
+    "popouts": [
+      {
+        "name": "vpn",
+        "component": "Popout.qml"
+      },
+      {
+        "name": "vpnOtp",
+        "component": "PopoutOtp.qml",
+        "dialog": true,
+        "parentIcon": "vpn"
+      }
+    ]
+  }
+}

@@ -1,0 +1,313 @@
+#!/bin/bash
+# Root helper of the vpn-forticlient extension of Sylphrena.
+#
+# Installed root-owned as /usr/local/sbin/sylphrena-fortivpn by ../system/install.sh (Nexus →
+# Extensions → Install), with a sudoers rule (NOPASSWD) for the user who installed it. The shell calls it with
+# `sudo -n`. Nothing here is specific to a company or network: every per-connection detail comes
+# from the connection file and the arguments.
+#
+#   start <id> [--otp CODE] [--health HOST] [--dns IP,...] [--domains DOMAIN,...] [--hosts IP=NAME,...]
+#   stop       tunnel down, DNS/hosts entries removed
+#   status     prints "connected|<ip>|<id>" or "disconnected||" (works without root)
+#   heal       like status, but tears down a tunnel that is up and unhealthy (after suspend)
+#   check <id> validates the connection file only (does not need root)
+#
+# <id> names ~/.config/sylphrena/vpn/<id>.conf of the calling user (written by the shell, mode 600).
+# The file is read *as that user*, validated (only known openfortivpn keys; certificate files are
+# copied the same way) and copied root-only to /run before openfortivpn reads it. So editing it can
+# not make openfortivpn (root) load code or read files the user could not read.
+#
+# Exit codes of start: 0 up, 2 failed / timed out, 3 authentication failed, 4 invalid input.
+
+set -euo pipefail
+umask 077
+export LC_ALL=C
+
+OPENFORTIVPN=/usr/bin/openfortivpn
+RUN_DIR=/run/sylphrena-fortivpn
+CONN_DIR="$RUN_DIR/conn"
+STATE="$RUN_DIR/state"
+LOG="$RUN_DIR/openfortivpn.log"
+HOSTS_TAG="# sylphrena-vpn"
+
+ID_RE='^[A-Za-z0-9_-]{1,64}$'
+IPV4_RE='^([0-9]{1,3}\.){3}[0-9]{1,3}$'
+HOST_RE='^[A-Za-z0-9]([A-Za-z0-9.-]{0,252})$'
+DOMAIN_RE='^~?[A-Za-z0-9]([A-Za-z0-9.-]{0,252})$'
+
+# openfortivpn keys a connection file may use. Anything else (pppd-*, use-resolvconf, …) is refused.
+ALLOWED_KEYS=" host port username password realm user-cert user-key ca-file trusted-cert set-routes \
+set-dns half-internet-routes persistent seclevel-1 insecure-ssl min-tls cipher-list user-agent \
+otp-prompt otp-delay no-ftm-push pem-passphrase sni "
+# Keys whose value is a file: copied (as the user) next to the root-only copy of the config
+PATH_KEYS=" user-cert user-key ca-file "
+
+die() {
+  echo "$2" >&2
+  exit "$1"
+}
+
+need_root() {
+  [[ "$(id -u)" -eq 0 ]] || die 4 "sylphrena-fortivpn: must run as root (sudo)"
+}
+
+caller() {
+  local u="${SUDO_USER:-}"
+  if [[ -z "$u" ]]; then
+    [[ "$(id -u)" -ne 0 ]] || die 4 "sylphrena-fortivpn: run through sudo"
+    u="$(id -un)"
+  fi
+  [[ "$u" != root ]] || die 4 "sylphrena-fortivpn: run as a regular user through sudo"
+  echo "$u"
+}
+
+# cat a file with the permissions of the calling user (never root's)
+user_cat() {
+  if [[ "$(id -u)" -eq 0 ]]; then
+    runuser -u "$USER_NAME" -- cat -- "$1"
+  else
+    cat -- "$1"
+  fi
+}
+
+conf_path() {
+  local home
+  home="$(getent passwd "$USER_NAME" | cut -d: -f6)"
+  [[ -n "$home" ]] || die 4 "sylphrena-fortivpn: no home for $USER_NAME"
+  echo "$home/.config/sylphrena/vpn/$1.conf"
+}
+
+# Validate the connection file of <id>; with a second argument, also write the root-only copy
+# (and the certificate files) into that directory.
+prepare_conf() {
+  local id="$1" out_dir="${2:-}" src text line key value n=0
+  [[ "$id" =~ $ID_RE ]] || die 4 "sylphrena-fortivpn: invalid connection id"
+  src="$(conf_path "$id")"
+  text="$(user_cat "$src" 2>/dev/null)" || die 4 "sylphrena-fortivpn: cannot read the connection file of $id"
+  local out=""
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    n=$((n + 1))
+    line="${line%$'\r'}"
+    [[ "$line" =~ ^[[:space:]]*(#.*)?$ ]] && continue
+    if [[ ! "$line" =~ ^[[:space:]]*([a-z0-9-]+)[[:space:]]*=[[:space:]]*(.*)$ ]]; then
+      die 4 "sylphrena-fortivpn: line $n of the connection file is not 'key = value'"
+    fi
+    key="${BASH_REMATCH[1]}"
+    value="${BASH_REMATCH[2]}"
+    [[ "$ALLOWED_KEYS" == *" $key "* ]] || die 4 "sylphrena-fortivpn: option '$key' is not allowed"
+    if [[ "$PATH_KEYS" == *" $key "* ]]; then
+      [[ "$value" == /* ]] || die 4 "sylphrena-fortivpn: '$key' must be an absolute path"
+      if [[ -n "$out_dir" ]]; then
+        user_cat "$value" >"$out_dir/$key" 2>/dev/null || die 4 "sylphrena-fortivpn: cannot read the file of '$key'"
+        value="$out_dir/$key"
+      fi
+    fi
+    out+="$key = $value"$'\n'
+  done <<<"$text"
+  [[ "$out" == *"host = "* ]] || die 4 "sylphrena-fortivpn: the connection file has no host"
+  if [[ -n "$out_dir" ]]; then
+    printf '%s' "$out" >"$out_dir/openfortivpn.conf"
+  fi
+}
+
+kill_vpn() {
+  pkill -x openfortivpn 2>/dev/null || true
+  for _ in 1 2 3 4 5 6 7 8; do
+    pgrep -x openfortivpn >/dev/null 2>&1 || return 0
+    sleep 0.3
+  done
+  pkill -9 -x openfortivpn 2>/dev/null || true
+}
+
+state_get() {
+  [[ -f "$STATE" ]] || return 0
+  sed -n "s/^$1=//p" "$STATE" | head -n1
+}
+
+iface_ip() {
+  ip -4 -o addr show "$1" 2>/dev/null | awk '{print $4}' | cut -d/ -f1 | head -n1
+}
+
+hosts_down() {
+  if grep -qF "$HOSTS_TAG" /etc/hosts 2>/dev/null; then
+    local tmp
+    tmp="$(mktemp /etc/hosts.sylphrena.XXXXXX)"
+    grep -vF "$HOSTS_TAG" /etc/hosts >"$tmp" || true
+    chmod 644 "$tmp"
+    mv -f "$tmp" /etc/hosts
+  fi
+}
+
+hosts_up() {
+  local list="$1" entry ip name
+  [[ -n "$list" ]] || return 0
+  IFS=',' read -ra entries <<<"$list"
+  for entry in "${entries[@]}"; do
+    ip="${entry%%=*}"
+    name="${entry#*=}"
+    echo "$ip $name $HOSTS_TAG" >>/etc/hosts
+  done
+}
+
+resolved_active() {
+  command -v resolvectl >/dev/null 2>&1 && systemctl is-active --quiet systemd-resolved
+}
+
+dns_up() {
+  local iface="$1" dns="$2" domains="$3"
+  # Without systemd-resolved, openfortivpn's own set-dns already writes the server's DNS
+  resolved_active || return 0
+  if [[ -n "$dns" ]]; then
+    # shellcheck disable=SC2086
+    resolvectl dns "$iface" ${dns//,/ } 2>/dev/null || true
+  fi
+  if [[ -n "$domains" ]]; then
+    # shellcheck disable=SC2086
+    resolvectl domain "$iface" ${domains//,/ } 2>/dev/null || true
+    resolvectl default-route "$iface" no 2>/dev/null || true
+  fi
+}
+
+cleanup() {
+  kill_vpn
+  local iface
+  iface="$(state_get iface)"
+  if [[ -n "$iface" ]] && resolved_active; then
+    resolvectl revert "$iface" 2>/dev/null || true
+  fi
+  hosts_down
+  rm -rf "$CONN_DIR" "$STATE"
+}
+
+# 0 when the tunnel of the state file is up, its process alive and (if set) the health host answers
+healthy() {
+  local iface health
+  [[ -f "$STATE" ]] || return 1
+  iface="$(state_get iface)"
+  [[ -n "$iface" && -n "$(iface_ip "$iface")" ]] || return 1
+  pgrep -x openfortivpn >/dev/null 2>&1 || return 1
+  health="$(state_get health)"
+  if [[ -n "$health" ]]; then
+    ping -c1 -W2 "$health" >/dev/null 2>&1 || return 1
+  fi
+  return 0
+}
+
+print_status() {
+  if healthy; then
+    echo "connected|$(iface_ip "$(state_get iface)")|$(state_get id)"
+    return 0
+  fi
+  echo "disconnected||"
+  return 1
+}
+
+validate_list() {
+  local list="$1" re="$2" what="$3" item
+  [[ -n "$list" ]] || return 0
+  IFS=',' read -ra items <<<"$list"
+  for item in "${items[@]}"; do
+    [[ "$item" =~ $re ]] || die 4 "sylphrena-fortivpn: invalid $what '$item'"
+  done
+}
+
+cmd_start() {
+  need_root
+  local id="${1:-}"
+  shift || true
+  local otp="" health="" dns="" domains="" hosts=""
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      --otp) otp="${2:-}"; shift 2 ;;
+      --health) health="${2:-}"; shift 2 ;;
+      --dns) dns="${2:-}"; shift 2 ;;
+      --domains) domains="${2:-}"; shift 2 ;;
+      --hosts) hosts="${2:-}"; shift 2 ;;
+      *) die 4 "sylphrena-fortivpn: unknown option $1" ;;
+    esac
+  done
+  otp="$(tr -d '[:space:]' <<<"$otp")"
+  [[ -z "$otp" || "$otp" =~ ^[A-Za-z0-9]{1,32}$ ]] || die 4 "sylphrena-fortivpn: invalid OTP"
+  [[ -z "$health" || "$health" =~ $IPV4_RE || "$health" =~ $HOST_RE ]] || die 4 "sylphrena-fortivpn: invalid health host"
+  validate_list "$dns" "$IPV4_RE" "DNS server"
+  validate_list "$domains" "$DOMAIN_RE" "domain"
+  if [[ -n "$hosts" ]]; then
+    local entry
+    IFS=',' read -ra entries <<<"$hosts"
+    for entry in "${entries[@]}"; do
+      [[ "$entry" == *=* && "${entry%%=*}" =~ $IPV4_RE && "${entry#*=}" =~ $HOST_RE ]] || die 4 "sylphrena-fortivpn: invalid hosts entry '$entry'"
+    done
+  fi
+  [[ -x "$OPENFORTIVPN" ]] || die 2 "sylphrena-fortivpn: openfortivpn is not installed"
+
+  cleanup
+  # The run dir is world-readable so `status` works without sudo; the connection copy is root-only
+  mkdir -p "$RUN_DIR"
+  chmod 755 "$RUN_DIR"
+  mkdir -p "$CONN_DIR"
+  chmod 700 "$CONN_DIR"
+  prepare_conf "$id" "$CONN_DIR"
+  : >"$LOG"
+
+  local args=(-c "$CONN_DIR/openfortivpn.conf" --persistent=0 -v)
+  [[ -n "$otp" ]] && args+=("--otp=$otp")
+  nohup "$OPENFORTIVPN" "${args[@]}" >>"$LOG" 2>&1 &
+  disown || true
+
+  local iface=""
+  for _ in $(seq 1 50); do
+    sleep 0.5
+    iface="$(grep -oE 'Interface (ppp[0-9]+) is UP' "$LOG" 2>/dev/null | awk '{print $2}' | tail -n1 || true)"
+    if [[ -n "$iface" && -n "$(iface_ip "$iface")" ]]; then
+      printf 'id=%s\niface=%s\nhealth=%s\nhosts=%s\n' "$id" "$iface" "$health" "$hosts" >"$STATE"
+      chmod 644 "$STATE"
+      dns_up "$iface" "$dns" "$domains"
+      hosts_up "$hosts"
+      exit 0
+    fi
+    if grep -qE 'Could not authenticate|Authentication failed|Login failed|Too many bad login|Permission denied|Bad credentials' "$LOG" 2>/dev/null; then
+      cleanup
+      die 3 "sylphrena-fortivpn: authentication failed"
+    fi
+    if ! pgrep -x openfortivpn >/dev/null 2>&1; then
+      local reason
+      reason="$(grep -E 'ERROR:' "$LOG" 2>/dev/null | tail -n1 | sed 's/^.*ERROR:[[:space:]]*//' || true)"
+      cleanup
+      die 2 "${reason:-sylphrena-fortivpn: openfortivpn exited}"
+    fi
+  done
+  cleanup
+  die 2 "sylphrena-fortivpn: timed out waiting for the tunnel"
+}
+
+cmd="${1:-}"
+shift || true
+case "$cmd" in
+  start)
+    USER_NAME="$(caller)"
+    cmd_start "$@"
+    ;;
+  stop)
+    need_root
+    cleanup
+    ;;
+  status)
+    print_status || true
+    ;;
+  heal)
+    need_root
+    if ! print_status; then
+      if [[ -f "$STATE" ]] || pgrep -x openfortivpn >/dev/null 2>&1 || grep -qF "$HOSTS_TAG" /etc/hosts 2>/dev/null; then
+        cleanup
+      fi
+    fi
+    ;;
+  check)
+    USER_NAME="$(caller)"
+    prepare_conf "${1:-}"
+    echo ok
+    ;;
+  *)
+    die 4 "usage: sylphrena-fortivpn {start <id> [--otp C] [--health H] [--dns ..] [--domains ..] [--hosts IP=NAME,..]|stop|status|heal|check <id>}"
+    ;;
+esac

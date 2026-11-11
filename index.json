@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "name": "Sylphrena Hub",
+  "repository": "https://github.com/iMacnucintosh/sylphrena-hub",
+  "items": [
+    {
+      "id": "vpn-forticlient",
+      "kind": "extension",
+      "name": "VPN FortiClient",
+      "description": "Adds FortiClient VPN connections to Network, with OTP codes and client certificates",
+      "icon": "verified_user",
+      "version": "0.4.1",
+      "path": "extensions/vpn-forticlient",
+      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/vpn-forticlient-0.4.1/vpn-forticlient-0.4.1.zip",
+      "sha256": "f579989c541af5596c30e72e2dfb3fceea1c326fcc1337e52302a5ff5336fac2",
+      "size": 28721
+    }
+  ]
+}
