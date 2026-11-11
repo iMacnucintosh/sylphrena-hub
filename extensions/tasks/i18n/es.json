@@ -1,0 +1,12 @@
+{
+  "%n pending": [
+    "%n pendiente",
+    "%n pendientes"
+  ],
+  "All done": "Todo listo",
+  "Checklist: create, complete and delete tasks": "Lista de tareas: crea, completa y elimina",
+  "Completed (%1)": "Completadas (%1)",
+  "New task": "Nueva tarea",
+  "Nothing to do": "Nada pendiente",
+  "Tasks": "Tareas"
+}
