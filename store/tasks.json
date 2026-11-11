@@ -14,6 +14,13 @@
   },
   "changelog": [
     {
+      "version": "0.1.2",
+      "date": "2026-11-11",
+      "changes": [
+        "Needs Sylphrena 0.3: the plural of the pending tasks is translated"
+      ]
+    },
+    {
       "version": "0.1.1",
       "date": "2026-11-11",
       "changes": [
@@ -41,6 +48,7 @@
       "First release in the hub (it used to ship with the shell)": "Primera versión en el hub (antes venía con la shell)",
       "Lists the data it leaves behind, so removing it can delete it too": "Declara los datos que deja, para que al quitarla se puedan borrar también",
       "Lives in the dashboard carousel, next to the calendar and Hydration": "Vive en el carrusel del dashboard, junto al calendario y la hidratación",
+      "Needs Sylphrena 0.3: the plural of the pending tasks is translated": "Necesita Sylphrena 0.3: el plural de las tareas pendientes se traduce",
       "The Tasks widget in the dashboard carousel": "El widget de tareas en el carrusel del dashboard",
       "Your tasks are kept in one small file and survive restarts": "Tus tareas se guardan en un fichero pequeño y sobreviven a los reinicios"
     }

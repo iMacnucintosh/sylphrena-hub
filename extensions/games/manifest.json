@@ -19,7 +19,7 @@
     ]
   },
   "requires": {
-    "sylphrena": ">=0.2.0",
+    "sylphrena": ">=0.3.0",
     "apps": [
       "Steam, with an API key and your Steam ID in the extension's settings"
     ],

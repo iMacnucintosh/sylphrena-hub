@@ -17,7 +17,8 @@
       "version": "0.1.4",
       "date": "2026-11-11",
       "changes": [
-        "No more console warning when the achievements list closes"
+        "No more console warning when the achievements list closes",
+        "Needs Sylphrena 0.3"
       ]
     },
     {

@@ -11,7 +11,7 @@
       "icon": "sports_esports",
       "version": "0.1.4",
       "apiVersion": 1,
-      "requires": ">=0.2.0",
+      "requires": ">=0.3.0",
       "system": false,
       "needs": [
         "Steam, with an API key and your Steam ID in the extension's settings"
@@ -27,7 +27,7 @@
       ],
       "path": "extensions/games",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/games-0.1.4/games-0.1.4.zip",
-      "sha256": "99111309e1cfc1d70c617677f845b96b36d1ff1697973d354c6df4b336142896",
+      "sha256": "048b5aeea024550db43462bb7f1b661f0821aa42d166210ed26ba3f5bb811624",
       "size": 44496,
       "i18n": {
         "es": {
@@ -76,9 +76,9 @@
       "name": "Tasks",
       "description": "Checklist: create, complete and delete tasks",
       "icon": "checklist",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "apiVersion": 1,
-      "requires": ">=0.2.0",
+      "requires": ">=0.3.0",
       "system": false,
       "needs": [],
       "optional": [],
@@ -86,9 +86,9 @@
         "state:tasks.json"
       ],
       "path": "extensions/tasks",
-      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/tasks-0.1.1/tasks-0.1.1.zip",
-      "sha256": "68b615df7fa3436aa0a085fdd9b423265fb27ae3d49b9a4f1bc7c8ef926f22e0",
-      "size": 5239,
+      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/tasks-0.1.2/tasks-0.1.2.zip",
+      "sha256": "c029423ab8bf5af5193bff0203b37c74244ea085fdbc53695e0eac9e0acee9b7",
+      "size": 5240,
       "i18n": {
         "es": {
           "name": "Tareas",

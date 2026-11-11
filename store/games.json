@@ -18,7 +18,8 @@
       "version": "0.1.4",
       "date": "2026-11-11",
       "changes": [
-        "No more console warning when the achievements list closes"
+        "No more console warning when the achievements list closes",
+        "Needs Sylphrena 0.3"
       ]
     },
     {
@@ -65,6 +66,7 @@
       "Games added to Steam as shortcuts and their sessions are included": "Incluye los juegos añadidos a Steam como accesos directos y sus sesiones",
       "Games marked as private in your Steam library are no longer shown": "Los juegos marcados como privados en tu biblioteca de Steam ya no se muestran",
       "Games you hid or marked as private in Steam stay out": "Los juegos que ocultaste o marcaste como privados en Steam no salen",
+      "Needs Sylphrena 0.3": "Necesita Sylphrena 0.3",
       "No more console warning when the achievements list closes": "Ya no sale un aviso en la consola al cerrar la lista de logros",
       "The Games tab: profile, play time, the game played last and the activity calendar": "La pestaña Juegos: perfil, tiempo de juego, el último juego jugado y el calendario de actividad",
       "The activity calendar is shaded relative to your busiest day": "El calendario de actividad se sombrea respecto a tu día de más juego",
