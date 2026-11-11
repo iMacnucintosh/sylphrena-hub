@@ -1,0 +1,36 @@
+{
+  "about": "A checklist for your dashboard. Add tasks, tick them off when they are done and delete the ones you no longer need. Completed tasks fold away so the list stays short.",
+  "highlights": [
+    "Lives in the dashboard carousel, next to the calendar and Hydration",
+    "Your tasks are kept in one small file and survive restarts",
+    "Completed tasks fold away and can be shown again"
+  ],
+  "author": "iMacnucintosh",
+  "license": "GPL-3.0",
+  "links": {
+    "source": "https://github.com/iMacnucintosh/sylphrena-hub/tree/main/extensions/tasks",
+    "issues": "https://github.com/iMacnucintosh/sylphrena-hub/issues"
+  },
+  "changelog": [
+    {
+      "version": "0.1.1",
+      "date": "2026-11-11",
+      "changes": [
+        "Lists the data it leaves behind, so removing it can delete it too"
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-11-11",
+      "changes": [
+        "First release in the hub (it used to ship with the shell)"
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "dashboard.png",
+      "caption": "The Tasks widget in the dashboard carousel"
+    }
+  ]
+}

@@ -1,0 +1,69 @@
+{
+  "id": "games",
+  "about": "Your Steam library in the dashboard: profile and level, play time, achievements with their rarity, the games you played last and a calendar of the days you played. It also counts the games you launch from outside Steam.",
+  "highlights": [
+    "The game you played last is featured, with its achievements and how rare each one is",
+    "A month calendar shaded by how much you played each day",
+    "Games added to Steam as shortcuts and their sessions are included",
+    "Games you hid or marked as private in Steam stay out"
+  ],
+  "author": "iMacnucintosh",
+  "license": "GPL-3.0",
+  "links": {
+    "source": "https://github.com/iMacnucintosh/sylphrena-hub/tree/main/extensions/games",
+    "issues": "https://github.com/iMacnucintosh/sylphrena-hub/issues"
+  },
+  "changelog": [
+    {
+      "version": "0.1.3",
+      "date": "2026-11-11",
+      "changes": [
+        "The featured game is the one played last",
+        "A status block shows whether Steam, Millennium and its plugin are found",
+        "The activity calendar is shaded relative to your busiest day"
+      ]
+    },
+    {
+      "version": "0.1.2",
+      "date": "2026-11-11",
+      "changes": [
+        "Games marked as private in your Steam library are no longer shown"
+      ]
+    },
+    {
+      "version": "0.1.1",
+      "date": "2026-11-11",
+      "changes": [
+        "Translated name, description and requirements"
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-11-11",
+      "changes": [
+        "First release in the hub (it used to ship with the shell)"
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "url": "https://raw.githubusercontent.com/iMacnucintosh/sylphrena-hub/main/extensions/games/store/screenshots/dashboard.png",
+      "caption": "The Games tab: profile, play time, the game played last and the activity calendar"
+    }
+  ],
+  "i18n": {
+    "es": {
+      "A month calendar shaded by how much you played each day": "Un calendario del mes sombreado según lo que jugaste cada día",
+      "A status block shows whether Steam, Millennium and its plugin are found": "Un bloque de estado indica si se encuentran Steam, Millennium y su plugin",
+      "Games added to Steam as shortcuts and their sessions are included": "Incluye los juegos añadidos a Steam como accesos directos y sus sesiones",
+      "Games marked as private in your Steam library are no longer shown": "Los juegos marcados como privados en tu biblioteca de Steam ya no se muestran",
+      "Games you hid or marked as private in Steam stay out": "Los juegos que ocultaste o marcaste como privados en Steam no salen",
+      "The Games tab: profile, play time, the game played last and the activity calendar": "La pestaña Juegos: perfil, tiempo de juego, el último juego jugado y el calendario de actividad",
+      "The activity calendar is shaded relative to your busiest day": "El calendario de actividad se sombrea respecto a tu día de más juego",
+      "The featured game is the one played last": "El juego destacado es el último que jugaste",
+      "The game you played last is featured, with its achievements and how rare each one is": "El último juego que jugaste sale destacado, con sus logros y lo raro que es cada uno",
+      "Translated name, description and requirements": "Nombre, descripción y requisitos traducidos",
+      "Your Steam library in the dashboard: profile and level, play time, achievements with their rarity, the games you played last and a calendar of the days you played. It also counts the games you launch from outside Steam.": "Tu biblioteca de Steam en el dashboard: perfil y nivel, tiempo de juego, logros con su rareza, los últimos juegos y un calendario de los días que jugaste. También cuenta los juegos que lanzas fuera de Steam."
+    }
+  }
+}

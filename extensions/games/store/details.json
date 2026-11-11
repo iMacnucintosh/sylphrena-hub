@@ -1,0 +1,53 @@
+{
+  "about": "Your Steam library in the dashboard: profile and level, play time, achievements with their rarity, the games you played last and a calendar of the days you played. It also counts the games you launch from outside Steam.",
+  "highlights": [
+    "The game you played last is featured, with its achievements and how rare each one is",
+    "A month calendar shaded by how much you played each day",
+    "Games added to Steam as shortcuts and their sessions are included",
+    "Games you hid or marked as private in Steam stay out"
+  ],
+  "author": "iMacnucintosh",
+  "license": "GPL-3.0",
+  "links": {
+    "source": "https://github.com/iMacnucintosh/sylphrena-hub/tree/main/extensions/games",
+    "issues": "https://github.com/iMacnucintosh/sylphrena-hub/issues"
+  },
+  "changelog": [
+    {
+      "version": "0.1.3",
+      "date": "2026-11-11",
+      "changes": [
+        "The featured game is the one played last",
+        "A status block shows whether Steam, Millennium and its plugin are found",
+        "The activity calendar is shaded relative to your busiest day"
+      ]
+    },
+    {
+      "version": "0.1.2",
+      "date": "2026-11-11",
+      "changes": [
+        "Games marked as private in your Steam library are no longer shown"
+      ]
+    },
+    {
+      "version": "0.1.1",
+      "date": "2026-11-11",
+      "changes": [
+        "Translated name, description and requirements"
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-11-11",
+      "changes": [
+        "First release in the hub (it used to ship with the shell)"
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "dashboard.png",
+      "caption": "The Games tab: profile, play time, the game played last and the activity calendar"
+    }
+  ]
+}

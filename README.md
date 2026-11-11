@@ -20,6 +20,19 @@ El catálogo completo, con versiones, enlaces de descarga y `sha256`, está en [
 
 Eliminarla (papelera en su tarjeta) quita también lo que instaló como administrador y sus conexiones o datos de sistema.
 
+## La ficha de cada extensión (`store/`)
+
+Lo que Things enseña al abrir una extensión (descripción larga, puntos destacados, novedades por versión, enlaces y capturas)
+vive en `extensions/<id>/store/` y **no va dentro del zip**:
+
+- `details.json`: `about`, `highlights` (hasta 6), `author`, `license`, `links` (`source`, `issues`, `web`; solo https), `changelog`
+  (`version`, `date`, `changes`) y `screenshots` (`file` + `caption`).
+- `screenshots/`: imágenes png, jpg o webp de hasta 1,5 MB (máximo 6). Sin datos personales: usa datos de ejemplo.
+- `i18n/<idioma>.json`: texto en inglés → traducción, para todo lo anterior.
+
+`scripts/build.py` valida todo y genera `store/<id>.json` (lo que descarga Things); el índice lo enlaza. **Los requisitos** (`requires`),
+lo que **toca en el equipo** (`system`, `data`) salen del manifiesto, sin escribirlos dos veces.
+
 ## Para quien publique aquí
 
 Cada extensión es una carpeta `extensions/<id>/` con su `manifest.json` (ver `AGENTS.md` de Sylphrena, sección «Extensiones»).

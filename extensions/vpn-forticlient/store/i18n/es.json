@@ -1,0 +1,9 @@
+{
+  "Adds FortiClient VPN connections to Nexus → Network. Each connection keeps its server, user and password (the password never goes into your shell settings), and you connect from the VPN icon in the bar, with a one-time code when the server asks for it.": "Añade conexiones VPN FortiClient a Nexus → Red. Cada conexión guarda su servidor, usuario y contraseña (la contraseña nunca va a los ajustes de la shell), y te conectas desde el icono VPN de la barra, con un código de un solo uso cuando el servidor lo pide.",
+  "Declares the Sylphrena version it needs": "Declara la versión de Sylphrena que necesita",
+  "Export and import your connections, with passwords encrypted by a passphrase if you want them": "Exporta e importa tus conexiones, con las contraseñas cifradas con una frase de paso si las quieres",
+  "Needs administrator rights once, to install its helper": "Necesita permisos de administrador una vez, para instalar su ayudante",
+  "One-time codes, client certificates and a health check that closes a dead tunnel after suspend": "Códigos de un solo uso, certificados de cliente y una comprobación que cierra un túnel muerto tras suspender",
+  "Published in the hub": "Publicada en el hub",
+  "Several connections, one connected at a time": "Varias conexiones, una conectada a la vez"
+}
