@@ -46,7 +46,8 @@ Las reglas del proyecto valen también aquí:
 
 ```bash
 scripts/build.py            # genera dist/<id>-<versión>.zip y reescribe index.json
-scripts/build.py --check    # comprueba que index.json está al día (para CI)
+scripts/build.py --check    # comprueba que index.json y store/ están al día y que ninguna versión publicada cambió de zip (para CI)
+python3 -m unittest discover -s tests   # tests (validación de fichas, zips, scripts de Juegos)
 scripts/publish.sh <id>     # publica el zip como release <id>-<versión>
 ```
 

@@ -12,3 +12,5 @@ jobs:
           fetch-depth: 0
       - name: index.json matches the sources
         run: python3 scripts/build.py --check
+      - name: tests
+        run: python3 -m unittest discover -s tests -q
