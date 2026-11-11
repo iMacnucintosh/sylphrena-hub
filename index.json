@@ -21,8 +21,8 @@
       ],
       "path": "extensions/games",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/games-0.1.3/games-0.1.3.zip",
-      "sha256": "679e37a174e87620afe7d010fef026987bd951c234475a5e3e9fde0f74591d8c",
-      "size": 42885,
+      "sha256": "1d1946b2d90ec20c5374844b6ec54bc7f569b3c6c04e8fc46f99c37e45f55f28",
+      "size": 44287,
       "i18n": {
         "es": {
           "name": "Juegos (Steam)",
