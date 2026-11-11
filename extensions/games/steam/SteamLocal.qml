@@ -36,6 +36,7 @@ QtObject {
                         root.host.hiddenAppIds = (data.hiddenAppIds || []).map(id => String(id));
                         root.host.applyHiddenFilter();
                     }
+                    root.host.repickAutoFocus();
                 } catch (e) {
                     console.warn(`Steam local library parse failed: ${e}`);
                     root.host.nonSteamGames = [];

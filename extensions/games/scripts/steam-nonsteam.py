@@ -330,10 +330,29 @@ def load_for_account(root: Path, acct: str, playtimes: dict[str, dict]) -> tuple
     return games, hidden
 
 
+def requirements_status() -> dict:
+    """What the extension can use on this machine: Steam (a userdata folder), Millennium and its
+    Non-Steam Playtimes plugin. Only looks; installs nothing."""
+    home = Path.home()
+    steam = any((r / "userdata").is_dir() for r in steam_roots())
+    millennium = any(p.is_dir() for p in (home / ".local/share/millennium", home / ".millennium"))
+    plugin_dirs = [
+        home / ".local/share/millennium/plugins/non-steam-playtimes",
+        home / ".local/share/Steam/plugins/non-steam-playtimes",
+        home / ".steam/steam/plugins/non-steam-playtimes",
+    ]
+    return {"steam": steam, "millennium": millennium, "playtimes": any(d.is_dir() for d in plugin_dirs)}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--steamid", default="")
+    ap.add_argument("--status", action="store_true", help="print what is installed (Steam, Millennium, plugin)")
     args = ap.parse_args()
+    if args.status:
+        json.dump(requirements_status(), sys.stdout)
+        sys.stdout.write("\n")
+        return 0
     acct = account_id(args.steamid.strip() or None)
     playtimes = load_millennium_playtimes()
     games: list[dict] = []

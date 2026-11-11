@@ -4,7 +4,7 @@
   "name": "Games (Steam)",
   "description": "Steam library, achievements and play time in a dashboard tab",
   "icon": "sports_esports",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "apiVersion": 1,
   "contributes": {
     "service": "Service.qml",

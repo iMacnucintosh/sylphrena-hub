@@ -25,6 +25,7 @@ QtObject {
             const next = root.host.pickerGames[0];
             if (next)
                 root.host.setFocusApp(next.appId, next.name);
+                root.host.focusAuto = true;
         }
     }
 

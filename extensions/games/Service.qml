@@ -36,6 +36,8 @@ Scope {
     property list<var> nonSteamGames: [] // experimental: local shortcuts.vdf
     property list<string> hiddenAppIds: [] // Steam "Hidden" collection (local)
     property string focusAppId: ""
+    // True while the featured game was chosen by us (not by a click): it may change when more data arrives
+    property bool focusAuto: true
     property string focusGameName: ""
     property list<var> focusAchievements: [] // unlocked rarest first, then locked most common first
     readonly property list<int> focusUnlockTimes: focusAchievements.map(a => a.unlockTime).filter(t => t > 0)
@@ -219,9 +221,24 @@ Scope {
         activityMod.applyActivity(text);
     }
 
+    // The non-Steam library arrives after the Steam one: if the featured game was picked automatically,
+    // pick again now that every game is known (otherwise a non-Steam game played last would lose to a
+    // Steam one that was merely the first to load)
+    function repickAutoFocus(): void {
+        if (!root.focusAuto || root.profile?.gameId)
+            return;
+        const best = root.pickerGames[0];
+        if (!best?.appId || String(best.appId) === root.focusAppId)
+            return;
+        root.focusAppId = String(best.appId);
+        root.focusGameName = best.name || "";
+        achievementsMod.loadFocusAchievements(root.gen);
+    }
+
     function setFocusApp(appId: string, name: string): void {
         if (!appId || String(appId) === root.focusAppId)
             return;
+        root.focusAuto = false;
         root.focusAppId = String(appId);
         root.focusGameName = name || "";
         achievementsMod.loadFocusAchievements(root.gen);
@@ -235,6 +252,7 @@ Scope {
         root.nonSteamGames = [];
         root.hiddenAppIds = [];
         root.focusAppId = "";
+        root.focusAuto = true;
         root.focusGameName = "";
         root.focusAchievements = [];
         root.focusProgress = null;

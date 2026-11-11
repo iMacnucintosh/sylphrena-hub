@@ -140,24 +140,23 @@ StyledRect {
     readonly property real labelHeight: 14
     readonly property real cellSize: Math.floor((contentHeight - labelHeight - gap * 6) / 6)
 
+    // Busiest day of the month: the shades are relative to it, so a month of long sessions still shows
+    // which days were heavier (fixed hour thresholds turned every day into the darkest shade)
+    readonly property int maxDayMinutes: dayMinutes.reduce((m, v) => Math.max(m, v), 0)
+    readonly property int levels: 5
+
     function level(minutes: int): int {
-        if (minutes <= 0)
+        if (minutes <= 0 || maxDayMinutes <= 0)
             return 0;
-        if (minutes < 60)
-            return 1;
-        if (minutes < 120)
-            return 2;
-        return 3;
+        // Slightly curved so the light days do not all collapse into the first shade
+        const frac = Math.pow(Math.min(1, minutes / maxDayMinutes), 0.8);
+        return Math.max(1, Math.min(levels, Math.ceil(frac * levels)));
     }
 
     function levelColour(lvl: int): color {
-        if (lvl === 0)
+        if (lvl <= 0)
             return Colours.palette.m3surfaceContainerHighest;
-        if (lvl === 1)
-            return Qt.alpha(Colours.palette.m3primary, 0.35);
-        if (lvl === 2)
-            return Qt.alpha(Colours.palette.m3primary, 0.65);
-        return Colours.palette.m3primary;
+        return Qt.alpha(Colours.palette.m3primary, 0.2 + 0.8 * (lvl - 1) / (levels - 1));
     }
 
     implicitHeight: col.implicitHeight + Tokens.padding.large * 2
@@ -300,7 +299,7 @@ StyledRect {
                                     anchors.verticalCenterOffset: (cell.modelData?.markers ?? 0) > 0 ? -2 : 0
                                     text: cell.modelData?.day ?? ""
                                     font: Tokens.font.label.small
-                                    color: cell.lvl >= 2 ? Colours.palette.m3onPrimary : cell.lvl === 1 ? Colours.palette.m3onSurface : Colours.palette.m3outline
+                                    color: cell.lvl >= 3 ? Colours.palette.m3onPrimary : cell.lvl >= 1 ? Colours.palette.m3onSurface : Colours.palette.m3outline
                                 }
 
                                 StyledRect {
@@ -358,7 +357,7 @@ StyledRect {
                     }
 
                     Repeater {
-                        model: 4
+                        model: root.levels + 1
 
                         StyledRect {
                             required property int index
