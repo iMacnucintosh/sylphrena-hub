@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import struct
 import sys
 import time
@@ -220,11 +221,25 @@ def load_millennium_playtimes() -> dict[str, dict]:
     return out
 
 
-def load_hidden_ids(cfg: Path) -> list[str]:
-    cloud = cfg / "cloudstorage"
-    if not cloud.is_dir():
-        return []
+def load_private_ids(cfg: Path) -> set[str]:
+    """Games marked as private in the library ("Manage → Set as private"): Steam keeps them in
+    localconfig.vdf as "PrivateApps_<account>" "[id,id,…]"."""
+    try:
+        text = (cfg / "localconfig.vdf").read_text(encoding="utf-8", errors="replace")
+    except OSError:
+        return set()
     ids: set[str] = set()
+    for m in re.finditer(r'"PrivateApps_\d+"\s+"\[([^\]]*)\]"', text):
+        ids.update(x.strip() for x in m.group(1).split(",") if x.strip().isdigit())
+    return ids
+
+
+def load_hidden_ids(cfg: Path) -> list[str]:
+    """Games that must not show: the Hidden collection and the private ones."""
+    cloud = cfg / "cloudstorage"
+    ids: set[str] = load_private_ids(cfg)
+    if not cloud.is_dir():
+        return sorted(ids)
     for path in sorted(cloud.glob("cloud-storage-namespace-*.json")):
         if path.name.endswith(".modified.json"):
             continue

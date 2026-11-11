@@ -9,7 +9,7 @@
       "name": "Games (Steam)",
       "description": "Steam library, achievements and play time in a dashboard tab",
       "icon": "sports_esports",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "apiVersion": 1,
       "requires": ">=0.2.0",
       "system": false,
@@ -20,9 +20,9 @@
         "Millennium (Non-Steam Playtimes plugin): play time of games outside Steam"
       ],
       "path": "extensions/games",
-      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/games-0.1.1/games-0.1.1.zip",
-      "sha256": "da20a2e01329ebf0ed793053d4388162fbd6e2fb4af9584df9ab7c622d2f0e66",
-      "size": 42496,
+      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/games-0.1.2/games-0.1.2.zip",
+      "sha256": "132c6def6afef36dc59deba772a9c65162f60bbc495ca3a109102b89ce99561e",
+      "size": 42772,
       "i18n": {
         "es": {
           "name": "Juegos (Steam)",
