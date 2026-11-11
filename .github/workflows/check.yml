@@ -1,0 +1,12 @@
+name: check
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: index.json matches the sources
+        run: python3 scripts/build.py --check
