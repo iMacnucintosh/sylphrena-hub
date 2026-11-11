@@ -234,6 +234,11 @@ QtObject {
         if (root.host.profile?.gameId) {
             appId = root.host.profile.gameId;
             name = root.host.profile.gameExtraInfo || "";
+        } else if (root.host.pickerGames.length > 0) {
+            // The one played last (real timestamps and sessions), same order as the cover strip. Steam's
+            // "recently played" list is ordered by play time of the last two weeks, not by recency
+            appId = root.host.pickerGames[0].appId;
+            name = root.host.pickerGames[0].name;
         } else if (root.host.recentGames.length > 0) {
             appId = root.host.recentGames[0].appId;
             name = root.host.recentGames[0].name;
