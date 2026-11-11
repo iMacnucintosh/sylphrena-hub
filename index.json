@@ -13,10 +13,16 @@
       "apiVersion": 1,
       "requires": ">=0.2.0",
       "system": false,
+      "needs": [
+        "Steam, with an API key and your Steam ID in the extension's settings"
+      ],
+      "optional": [
+        "Millennium (Non-Steam Playtimes plugin): play time of games outside Steam"
+      ],
       "path": "extensions/games",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/games-0.1.0/games-0.1.0.zip",
-      "sha256": "c1903a77ff554c5e31e18a9cf680005a246eec0115228e32bcfd6d10ffed6ca9",
-      "size": 42230
+      "sha256": "18a8a1e982d2c1a35dbf4050bdf2ad5df05a356aa85ecb88f5de0496bd2fce76",
+      "size": 42329
     },
     {
       "id": "hydration",
@@ -28,6 +34,8 @@
       "apiVersion": 1,
       "requires": ">=0.2.0",
       "system": false,
+      "needs": [],
+      "optional": [],
       "path": "extensions/hydration",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/hydration-0.1.0/hydration-0.1.0.zip",
       "sha256": "185c4b6c23cc48efa10f628a56d80197fc1bda814a306a8dc7605bbbd376b52e",
@@ -43,6 +51,8 @@
       "apiVersion": 1,
       "requires": ">=0.2.0",
       "system": false,
+      "needs": [],
+      "optional": [],
       "path": "extensions/tasks",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/tasks-0.1.0/tasks-0.1.0.zip",
       "sha256": "f853ae7bf04c72c2f348af3f1013e62dc505e26f0759eee9c05c20f7dbc4106b",
@@ -58,6 +68,8 @@
       "apiVersion": 1,
       "requires": ">=0.2.0",
       "system": true,
+      "needs": [],
+      "optional": [],
       "path": "extensions/vpn-forticlient",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/vpn-forticlient-0.4.2/vpn-forticlient-0.4.2.zip",
       "sha256": "c27ef9b2c5eba47488f81b227e2f121eacf5453611febf65e37f3f6ca3fe3e7f",

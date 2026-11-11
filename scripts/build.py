@@ -5,7 +5,7 @@
   scripts/build.py --check    only verify that index.json matches the sources (exit 1 if not)
 
 An extension is a folder extensions/<id>/ with a manifest.json (id, name, description, version, icon,
-type, and optionally apiVersion, requires.sylphrena and system). The index copies from it what Things
+type, and optionally apiVersion, requires.sylphrena, requires.apps / requires.optional (programs it needs or can use, as short texts for the user) and system). The index copies from it what Things
 shows before installing: apiVersion, requires (which Sylphrena it needs) and system (it asks for
 administrator rights). The zip holds that folder (<id>/…, with the executable bits) and is what Sylphrena installs
 (Nexus → Extensions → Install from zip) and what Things downloads. Zips are deterministic: the same
@@ -63,6 +63,8 @@ def entries() -> list[dict]:
                 "apiVersion": m.get("apiVersion", 1),
                 "requires": (m.get("requires") or {}).get("sylphrena", ""),
                 "system": bool((m.get("system") or {}).get("install")),
+                "needs": list((m.get("requires") or {}).get("apps", [])),
+                "optional": list((m.get("requires") or {}).get("optional", [])),
                 "path": f"{folder}/{src.name}",
                 "zip": f"https://github.com/{REPO}/releases/download/{tag}/{zip_path.name}",
                 "sha256": hashlib.sha256(data).hexdigest(),
