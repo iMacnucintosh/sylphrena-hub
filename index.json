@@ -9,11 +9,14 @@
       "name": "VPN FortiClient",
       "description": "Adds FortiClient VPN connections to Network, with OTP codes and client certificates",
       "icon": "verified_user",
-      "version": "0.4.1",
+      "version": "0.4.2",
+      "apiVersion": 1,
+      "requires": ">=0.2.0",
+      "system": true,
       "path": "extensions/vpn-forticlient",
-      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/vpn-forticlient-0.4.1/vpn-forticlient-0.4.1.zip",
-      "sha256": "f579989c541af5596c30e72e2dfb3fceea1c326fcc1337e52302a5ff5336fac2",
-      "size": 28721
+      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/vpn-forticlient-0.4.2/vpn-forticlient-0.4.2.zip",
+      "sha256": "c27ef9b2c5eba47488f81b227e2f121eacf5453611febf65e37f3f6ca3fe3e7f",
+      "size": 28745
     }
   ]
 }
