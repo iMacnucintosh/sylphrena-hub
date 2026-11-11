@@ -18,6 +18,7 @@ import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 import zipfile
 from pathlib import Path
@@ -164,6 +165,18 @@ def store_docs() -> dict[str, str]:
     return out
 
 
+def published_changes(items: list[dict]) -> list[str]:
+    """Versions that are already in origin/main's index with a different zip: a release is immutable (the
+    sha256 of the index must match the published asset), so changing anything inside a zip needs a new version."""
+    try:
+        old = json.loads(subprocess.run(["git", "show", "origin/main:index.json"], cwd=ROOT, capture_output=True,
+                                        text=True, check=True).stdout)
+    except (subprocess.CalledProcessError, OSError, ValueError):
+        return []  # no origin/main to compare with (a fresh clone of something else): nothing to say
+    was = {(i["id"], i["version"]): i["sha256"] for i in old.get("items", [])}
+    return [f"{i['id']} {i['version']}" for i in items if (i["id"], i["version"]) in was and was[(i["id"], i["version"])] != i["sha256"]]
+
+
 def main() -> None:
     index = {
         "schema": 1,
@@ -176,6 +189,9 @@ def main() -> None:
     docs = store_docs()
     store_dir = ROOT / "store"
     if "--check" in sys.argv:
+        changed = published_changes(index["items"])
+        if changed:
+            sys.exit(f"{', '.join(changed)}: already published with another zip; bump the version in the manifest")
         if not target.exists() or target.read_text() != text:
             sys.exit("index.json is out of date: run scripts/build.py")
         for ext_id, doc in docs.items():
