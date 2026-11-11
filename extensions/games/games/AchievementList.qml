@@ -152,7 +152,7 @@ StyledRect {
                 readonly property bool firstLocked: locked && (index === 0 || !!root.model[index - 1]?.unlocked)
                 readonly property real headerHeight: firstLocked ? 28 + (index > 0 ? Tokens.spacing.small : 0) : 0
 
-                width: list.width - Tokens.spacing.small
+                width: (list?.width ?? 0) - Tokens.spacing.small
                 implicitHeight: headerHeight + Math.max(baseHeight, textCol.implicitHeight)
 
                 opacity: 0
