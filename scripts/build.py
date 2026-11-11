@@ -26,6 +26,26 @@ REPO = "iMacnucintosh/sylphrena-hub"
 KINDS = {"extensions": "extension"}  # folder -> kind in the index
 
 
+def translations(src: Path, m: dict) -> dict:
+    """What Things shows before installing (name, description, needs, optional), per language, from the
+    extension's own catalogs (i18n/<lang>.json). Only the texts that have a translation."""
+    out = {}
+    req = m.get("requires") or {}
+    for f in sorted((src / "i18n").glob("*.json")):
+        cat = json.loads(f.read_text())
+        t = {}
+        for key, val in (("name", m.get("name")), ("description", m.get("description"))):
+            if val and isinstance(cat.get(val), str):
+                t[key] = cat[val]
+        for key, src_key in (("needs", "apps"), ("optional", "optional")):
+            texts = [cat.get(x) for x in req.get(src_key, [])]
+            if texts and all(isinstance(x, str) for x in texts):
+                t[key] = texts
+        if t:
+            out[f.stem] = t
+    return out
+
+
 def build_zip(src: Path, dst: Path) -> None:
     dst.parent.mkdir(exist_ok=True)
     with zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED) as z:
@@ -69,6 +89,7 @@ def entries() -> list[dict]:
                 "zip": f"https://github.com/{REPO}/releases/download/{tag}/{zip_path.name}",
                 "sha256": hashlib.sha256(data).hexdigest(),
                 "size": len(data),
+                "i18n": translations(src, m),
             })
     return out
 
