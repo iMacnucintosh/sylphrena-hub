@@ -19,6 +19,12 @@
       "optional": [
         "Millennium (Non-Steam Playtimes plugin): play time of games outside Steam"
       ],
+      "data": [
+        "state:steam-activity.json",
+        "state:steam-activity.lock",
+        "state:steam-achievements-cache.json",
+        "state:nonsteam-sessions.json"
+      ],
       "path": "extensions/games",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/games-0.1.3/games-0.1.3.zip",
       "sha256": "96587d0f541eb514bace32c773e52ee60b63533604460f8f7d9affa9a9f216e6",
@@ -34,7 +40,8 @@
             "Millennium (plugin Non-Steam Playtimes): tiempo de juego de los juegos de fuera de Steam"
           ]
         }
-      }
+      },
+      "store": "https://raw.githubusercontent.com/iMacnucintosh/sylphrena-hub/main/store/games.json"
     },
     {
       "id": "hydration",
@@ -48,6 +55,9 @@
       "system": false,
       "needs": [],
       "optional": [],
+      "data": [
+        "state:hydration.json"
+      ],
       "path": "extensions/hydration",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/hydration-0.1.1/hydration-0.1.1.zip",
       "sha256": "9c9392a12be051cd21b4dd30decbfe505446f837b23167b3e64e5a7b9704c4f7",
@@ -57,7 +67,8 @@
           "name": "Hidratación",
           "description": "Control de agua con recordatorios"
         }
-      }
+      },
+      "store": "https://raw.githubusercontent.com/iMacnucintosh/sylphrena-hub/main/store/hydration.json"
     },
     {
       "id": "tasks",
@@ -71,6 +82,9 @@
       "system": false,
       "needs": [],
       "optional": [],
+      "data": [
+        "state:tasks.json"
+      ],
       "path": "extensions/tasks",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/tasks-0.1.1/tasks-0.1.1.zip",
       "sha256": "68b615df7fa3436aa0a085fdd9b423265fb27ae3d49b9a4f1bc7c8ef926f22e0",
@@ -80,7 +94,8 @@
           "name": "Tareas",
           "description": "Lista de tareas: crea, completa y elimina"
         }
-      }
+      },
+      "store": "https://raw.githubusercontent.com/iMacnucintosh/sylphrena-hub/main/store/tasks.json"
     },
     {
       "id": "vpn-forticlient",
@@ -94,6 +109,7 @@
       "system": true,
       "needs": [],
       "optional": [],
+      "data": [],
       "path": "extensions/vpn-forticlient",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/vpn-forticlient-0.4.2/vpn-forticlient-0.4.2.zip",
       "sha256": "c27ef9b2c5eba47488f81b227e2f121eacf5453611febf65e37f3f6ca3fe3e7f",
@@ -103,7 +119,8 @@
           "name": "VPN FortiClient",
           "description": "Añade conexiones VPN FortiClient a Red, con códigos OTP y certificados de cliente"
         }
-      }
+      },
+      "store": "https://raw.githubusercontent.com/iMacnucintosh/sylphrena-hub/main/store/vpn-forticlient.json"
     }
   ]
 }

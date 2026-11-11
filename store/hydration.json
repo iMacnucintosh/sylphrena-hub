@@ -1,0 +1,48 @@
+{
+  "id": "hydration",
+  "about": "Keeps count of the water you drink and reminds you when it is time for a glass. The widget shows today's progress as a water level with gentle waves, and you log a drink with one tap on a preset amount.",
+  "highlights": [
+    "Animated water level in the dashboard carousel",
+    "One tap logs a glass: four presets you can change",
+    "A reminder when you have gone too long without drinking",
+    "Daily goal and reminder interval are yours to set"
+  ],
+  "author": "iMacnucintosh",
+  "license": "GPL-3.0",
+  "links": {
+    "source": "https://github.com/iMacnucintosh/sylphrena-hub/tree/main/extensions/hydration",
+    "issues": "https://github.com/iMacnucintosh/sylphrena-hub/issues"
+  },
+  "changelog": [
+    {
+      "version": "0.1.1",
+      "date": "2026-11-11",
+      "changes": [
+        "Lists the data it leaves behind, so removing it can delete it too"
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-11-11",
+      "changes": [
+        "First release in the hub (it used to ship with the shell)"
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "url": "https://raw.githubusercontent.com/iMacnucintosh/sylphrena-hub/main/extensions/hydration/store/screenshots/dashboard.png",
+      "caption": "The Hydration widget: today's progress as a water level"
+    }
+  ],
+  "i18n": {
+    "es": {
+      "A reminder when you have gone too long without drinking": "Un aviso cuando llevas demasiado sin beber",
+      "Animated water level in the dashboard carousel": "Nivel de agua animado en el carrusel del dashboard",
+      "Daily goal and reminder interval are yours to set": "El objetivo diario y el intervalo de los avisos los eliges tú",
+      "Keeps count of the water you drink and reminds you when it is time for a glass. The widget shows today's progress as a water level with gentle waves, and you log a drink with one tap on a preset amount.": "Lleva la cuenta del agua que bebes y te recuerda cuándo toca un vaso. El widget muestra el progreso de hoy como un nivel de agua con olas suaves, y registras un vaso con un toque en una cantidad predefinida.",
+      "One tap logs a glass: four presets you can change": "Un toque registra un vaso: cuatro cantidades que puedes cambiar",
+      "The Hydration widget: today's progress as a water level": "El widget de hidratación: el progreso de hoy como nivel de agua"
+    }
+  }
+}

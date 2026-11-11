@@ -1,0 +1,32 @@
+{
+  "about": "Adds FortiClient VPN connections to Nexus → Network. Each connection keeps its server, user and password (the password never goes into your shell settings), and you connect from the VPN icon in the bar, with a one-time code when the server asks for it.",
+  "highlights": [
+    "One-time codes, client certificates and a health check that closes a dead tunnel after suspend",
+    "Several connections, one connected at a time",
+    "Export and import your connections, with passwords encrypted by a passphrase if you want them",
+    "Needs administrator rights once, to install its helper"
+  ],
+  "author": "iMacnucintosh",
+  "license": "GPL-3.0",
+  "links": {
+    "source": "https://github.com/iMacnucintosh/sylphrena-hub/tree/main/extensions/vpn-forticlient",
+    "issues": "https://github.com/iMacnucintosh/sylphrena-hub/issues"
+  },
+  "changelog": [
+    {
+      "version": "0.4.2",
+      "date": "2026-11-11",
+      "changes": [
+        "Declares the Sylphrena version it needs"
+      ]
+    },
+    {
+      "version": "0.4.1",
+      "date": "2026-11-11",
+      "changes": [
+        "Published in the hub"
+      ]
+    }
+  ],
+  "screenshots": []
+}

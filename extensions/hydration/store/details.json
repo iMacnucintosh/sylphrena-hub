@@ -1,0 +1,37 @@
+{
+  "about": "Keeps count of the water you drink and reminds you when it is time for a glass. The widget shows today's progress as a water level with gentle waves, and you log a drink with one tap on a preset amount.",
+  "highlights": [
+    "Animated water level in the dashboard carousel",
+    "One tap logs a glass: four presets you can change",
+    "A reminder when you have gone too long without drinking",
+    "Daily goal and reminder interval are yours to set"
+  ],
+  "author": "iMacnucintosh",
+  "license": "GPL-3.0",
+  "links": {
+    "source": "https://github.com/iMacnucintosh/sylphrena-hub/tree/main/extensions/hydration",
+    "issues": "https://github.com/iMacnucintosh/sylphrena-hub/issues"
+  },
+  "changelog": [
+    {
+      "version": "0.1.1",
+      "date": "2026-11-11",
+      "changes": [
+        "Lists the data it leaves behind, so removing it can delete it too"
+      ]
+    },
+    {
+      "version": "0.1.0",
+      "date": "2026-11-11",
+      "changes": [
+        "First release in the hub (it used to ship with the shell)"
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "dashboard.png",
+      "caption": "The Hydration widget: today's progress as a water level"
+    }
+  ]
+}

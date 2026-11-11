@@ -17,6 +17,7 @@ Releases: the zip of <id> <version> is published as the asset of the release tag
 import hashlib
 import json
 import os
+import re
 import sys
 import zipfile
 from pathlib import Path
@@ -46,11 +47,66 @@ def translations(src: Path, m: dict) -> dict:
     return out
 
 
+RAW = f"https://raw.githubusercontent.com/{REPO}/main"
+SHOT_EXT = {".png", ".jpg", ".jpeg", ".webp"}
+MAX_SHOT = 1_500_000  # bytes
+LINK_RE = re.compile(r"^https://[^\s]{4,300}$")
+
+
+def store_doc(src: Path, m: dict) -> dict | None:
+    """What Things shows when an extension is opened: long description, highlights, changelog, links and
+    screenshots, from extensions/<id>/store/ (details.json, i18n/<lang>.json, screenshots/*). Nothing of it
+    goes into the zip. Returns None when the extension has no store/ folder."""
+    folder = src / "store"
+    if not folder.is_dir():
+        return None
+    where = f"{src.name}/store"
+    d = json.loads((folder / "details.json").read_text())
+
+    def text(v, what, limit):
+        if not isinstance(v, str) or not v.strip() or len(v) > limit:
+            sys.exit(f"{where}: {what} must be a text of 1–{limit} characters")
+        return v.strip()
+
+    doc = {"id": m["id"], "about": text(d.get("about"), "about", 2000)}
+    doc["highlights"] = [text(x, "highlight", 160) for x in d.get("highlights", [])][:6]
+    doc["author"] = text(d.get("author", "iMacnucintosh"), "author", 80)
+    doc["license"] = text(d.get("license", "GPL-3.0"), "license", 40)
+    links = {}
+    for key, url in (d.get("links") or {}).items():
+        if key not in ("source", "issues", "web") or not LINK_RE.match(str(url)):
+            sys.exit(f"{where}: link '{key}' must be source, issues or web, and an https URL")
+        links[key] = url
+    doc["links"] = links
+    log = []
+    for entry in d.get("changelog", []):
+        if not re.match(r"^\d+\.\d+\.\d+$", str(entry.get("version", ""))) or not re.match(r"^\d{4}-\d{2}-\d{2}$", str(entry.get("date", ""))):
+            sys.exit(f"{where}: changelog entries need version (x.y.z) and date (YYYY-MM-DD)")
+        log.append({"version": entry["version"], "date": entry["date"],
+                    "changes": [text(c, "change", 240) for c in entry.get("changes", [])][:12]})
+    doc["changelog"] = log
+    shots = []
+    for shot in d.get("screenshots", [])[:6]:
+        f = Path(str(shot.get("file", "")))
+        path = folder / "screenshots" / f.name
+        if f.name != str(f) or f.suffix.lower() not in SHOT_EXT or not path.is_file():
+            sys.exit(f"{where}: screenshot '{shot.get('file')}' must be an image file in store/screenshots/")
+        if path.stat().st_size > MAX_SHOT:
+            sys.exit(f"{where}: {f.name} is bigger than {MAX_SHOT // 1000} KB")
+        shots.append({"url": f"{RAW}/extensions/{src.name}/store/screenshots/{f.name}", "caption": text(shot.get("caption"), "caption", 160)})
+    doc["screenshots"] = shots
+    i18n = {}
+    for f in sorted((folder / "i18n").glob("*.json")) if (folder / "i18n").is_dir() else []:
+        i18n[f.stem] = json.loads(f.read_text())
+    doc["i18n"] = i18n
+    return doc
+
+
 def build_zip(src: Path, dst: Path) -> None:
     dst.parent.mkdir(exist_ok=True)
     with zipfile.ZipFile(dst, "w", zipfile.ZIP_DEFLATED) as z:
         for folder, dirs, files in os.walk(src):
-            dirs[:] = sorted(d for d in dirs if d != "__pycache__")
+            dirs[:] = sorted(d for d in dirs if d != "__pycache__" and not (Path(folder) == src and d == "store"))
             for name in sorted(files):
                 path = Path(folder) / name
                 rel = Path(src.name) / path.relative_to(src)
@@ -85,12 +141,26 @@ def entries() -> list[dict]:
                 "system": bool((m.get("system") or {}).get("install")),
                 "needs": list((m.get("requires") or {}).get("apps", [])),
                 "optional": list((m.get("requires") or {}).get("optional", [])),
+                "data": list(m.get("data", [])),
                 "path": f"{folder}/{src.name}",
                 "zip": f"https://github.com/{REPO}/releases/download/{tag}/{zip_path.name}",
                 "sha256": hashlib.sha256(data).hexdigest(),
                 "size": len(data),
                 "i18n": translations(src, m),
+                **({"store": f"{RAW}/store/{m['id']}.json"} if (src / "store").is_dir() else {}),
             })
+    return out
+
+
+def store_docs() -> dict[str, str]:
+    """store/<id>.json (generated, committed): what Things fetches when an extension is opened."""
+    out = {}
+    for folder in KINDS:
+        for manifest in sorted((ROOT / folder).glob("*/manifest.json")):
+            m = json.loads(manifest.read_text())
+            doc = store_doc(manifest.parent, m)
+            if doc:
+                out[m["id"]] = json.dumps(doc, indent=2, ensure_ascii=False) + "\n"
     return out
 
 
@@ -103,12 +173,27 @@ def main() -> None:
     }
     text = json.dumps(index, indent=2, ensure_ascii=False) + "\n"
     target = ROOT / "index.json"
+    docs = store_docs()
+    store_dir = ROOT / "store"
     if "--check" in sys.argv:
         if not target.exists() or target.read_text() != text:
             sys.exit("index.json is out of date: run scripts/build.py")
-        print("index.json is up to date")
+        for ext_id, doc in docs.items():
+            f = store_dir / f"{ext_id}.json"
+            if not f.exists() or f.read_text() != doc:
+                sys.exit(f"store/{ext_id}.json is out of date: run scripts/build.py")
+        stale = [f.name for f in store_dir.glob("*.json") if f.stem not in docs] if store_dir.is_dir() else []
+        if stale:
+            sys.exit(f"store/{stale[0]} has no extension: run scripts/build.py")
+        print("index.json and store/ are up to date")
         return
     target.write_text(text)
+    store_dir.mkdir(exist_ok=True)
+    for f in store_dir.glob("*.json"):
+        if f.stem not in docs:
+            f.unlink()
+    for ext_id, doc in docs.items():
+        (store_dir / f"{ext_id}.json").write_text(doc)
     for item in index["items"]:
         print(f"{item['id']} {item['version']}  {item['sha256'][:12]}  {item['size']} bytes")
 
