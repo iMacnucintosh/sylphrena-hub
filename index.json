@@ -112,8 +112,8 @@
       "data": [],
       "path": "extensions/vpn-forticlient",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/vpn-forticlient-0.4.2/vpn-forticlient-0.4.2.zip",
-      "sha256": "06c72dc7bf738ea738deadaf4f0f3c8779bbaf922c003f1fce90b93df374980a",
-      "size": 28756,
+      "sha256": "c27ef9b2c5eba47488f81b227e2f121eacf5453611febf65e37f3f6ca3fe3e7f",
+      "size": 28745,
       "i18n": {
         "es": {
           "name": "VPN FortiClient",

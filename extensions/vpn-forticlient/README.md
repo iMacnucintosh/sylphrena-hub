@@ -22,4 +22,4 @@ Extensión de Sylphrena: conexiones VPN FortiClient (`openfortivpn`) en **Nexus 
 
 `openfortivpn` necesita root. Al instalar el zip se pide la contraseña una vez y se instalan, con la extensión: `openfortivpn` (si falta), el ayudante `/usr/local/sbin/sylphrena-fortivpn` y una regla de sudoers limitada a ese ayudante. El ayudante lee la configuración **como tu usuario**, solo acepta opciones conocidas de openfortivpn (nada de `pppd-*`) y la copia a `/run` (solo root). Al eliminar la extensión se quita todo.
 
-Se instala con Things (sección Sylphrena): ver el README de la raíz.
+Se instala desde zip: ver el README de la raíz.
