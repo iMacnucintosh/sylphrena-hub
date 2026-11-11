@@ -13,5 +13,5 @@ if gh release view "$tag" >/dev/null 2>&1; then
   echo "release $tag already exists: bump the version in the manifest to publish a new one" >&2
   exit 1
 fi
-gh release create "$tag" "$zip" --title "$id $version" --notes "Sylphrena extension $id $version. Install it from Nexus → Extensions → Install from zip."
+gh release create "$tag" "$zip" --title "$id $version" --notes "Sylphrena extension $id $version. Install it with Things (Sylphrena section) or `scripts/ext.py install-hub`."
 echo "published $tag"
