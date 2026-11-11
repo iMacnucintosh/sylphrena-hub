@@ -4,16 +4,76 @@
   "repository": "https://github.com/iMacnucintosh/sylphrena-hub",
   "items": [
     {
+      "id": "games",
+      "kind": "extension",
+      "name": "Games (Steam)",
+      "description": "Steam library, achievements and play time in a dashboard tab",
+      "icon": "sports_esports",
+      "version": "0.1.0",
+      "apiVersion": 1,
+      "requires": ">=0.2.0",
+      "system": false,
+      "needs": [
+        "Steam, with an API key and your Steam ID in the extension's settings"
+      ],
+      "optional": [
+        "Millennium (Non-Steam Playtimes plugin): play time of games outside Steam"
+      ],
+      "path": "extensions/games",
+      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/games-0.1.0/games-0.1.0.zip",
+      "sha256": "18a8a1e982d2c1a35dbf4050bdf2ad5df05a356aa85ecb88f5de0496bd2fce76",
+      "size": 42329
+    },
+    {
+      "id": "hydration",
+      "kind": "extension",
+      "name": "Hydration",
+      "description": "Water intake tracker with reminders",
+      "icon": "water_drop",
+      "version": "0.1.0",
+      "apiVersion": 1,
+      "requires": ">=0.2.0",
+      "system": false,
+      "needs": [],
+      "optional": [],
+      "path": "extensions/hydration",
+      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/hydration-0.1.0/hydration-0.1.0.zip",
+      "sha256": "185c4b6c23cc48efa10f628a56d80197fc1bda814a306a8dc7605bbbd376b52e",
+      "size": 9739
+    },
+    {
+      "id": "tasks",
+      "kind": "extension",
+      "name": "Tasks",
+      "description": "Checklist: create, complete and delete tasks",
+      "icon": "checklist",
+      "version": "0.1.0",
+      "apiVersion": 1,
+      "requires": ">=0.2.0",
+      "system": false,
+      "needs": [],
+      "optional": [],
+      "path": "extensions/tasks",
+      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/tasks-0.1.0/tasks-0.1.0.zip",
+      "sha256": "f853ae7bf04c72c2f348af3f1013e62dc505e26f0759eee9c05c20f7dbc4106b",
+      "size": 5218
+    },
+    {
       "id": "vpn-forticlient",
       "kind": "extension",
       "name": "VPN FortiClient",
       "description": "Adds FortiClient VPN connections to Network, with OTP codes and client certificates",
       "icon": "verified_user",
-      "version": "0.4.1",
+      "version": "0.4.2",
+      "apiVersion": 1,
+      "requires": ">=0.2.0",
+      "system": true,
+      "needs": [],
+      "optional": [],
       "path": "extensions/vpn-forticlient",
-      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/vpn-forticlient-0.4.1/vpn-forticlient-0.4.1.zip",
-      "sha256": "f579989c541af5596c30e72e2dfb3fceea1c326fcc1337e52302a5ff5336fac2",
-      "size": 28721
+      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/vpn-forticlient-0.4.2/vpn-forticlient-0.4.2.zip",
+      "sha256": "c27ef9b2c5eba47488f81b227e2f121eacf5453611febf65e37f3f6ca3fe3e7f",
+      "size": 28745
     }
   ]
 }

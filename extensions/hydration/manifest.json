@@ -1,0 +1,23 @@
+{
+  "id": "hydration",
+  "type": "widget",
+  "name": "Hydration",
+  "description": "Water intake tracker with reminders",
+  "offNote": "Off — also stops the reminders and the tracking",
+  "icon": "water_drop",
+  "version": "0.1.0",
+  "apiVersion": 1,
+  "contributes": {
+    "service": "Service.qml",
+    "widgets": [
+      {
+        "id": "hydration",
+        "component": "Widget.qml"
+      }
+    ],
+    "settings": "Settings.qml"
+  },
+  "requires": {
+    "sylphrena": ">=0.2.0"
+  }
+}
