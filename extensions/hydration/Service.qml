@@ -198,9 +198,12 @@ Scope {
         const notif = Notifs.pushLocal({
                 notificationId: "local:hydration",
                 summary: Tr.tr("Time to drink water"),
-                body: Tr.tr("%1 of %2 ml").arg(root.drunkMl).arg(root.dailyGoalMl),
-                // The day's water as the notification's progress bar (Sylphrena ≥ 0.5.2)
+                body: Tr.tr("Tap an amount to log it"),
+                // The day's water as the notification's progress bar, with what was drunk and the goal at its ends
+                // (Sylphrena ≥ 0.5.2)
                 localProgress: root.dailyGoalMl > 0 ? Math.min(1, root.drunkMl / root.dailyGoalMl) : 0,
+                progressFrom: `${root.drunkMl} ml`,
+                progressTo: `${root.dailyGoalMl} ml`,
                 appName: Tr.tr("Hydration"),
                 appIcon: "",
                 expireTimeout: Math.max(8000, GlobalConfig.notifs.defaultExpireTimeout),
