@@ -60,8 +60,8 @@
       ],
       "path": "extensions/hydration",
       "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/hydration-0.1.2/hydration-0.1.2.zip",
-      "sha256": "15426c374ec5f2e9d25ace8e5fca32385b27a99717451d007dabfe8a4138e802",
-      "size": 9846,
+      "sha256": "86f142f820aaa5b686a975d8a637bd3d7957819f010057655213087ec19c3ae2",
+      "size": 10121,
       "i18n": {
         "es": {
           "name": "Hidratación",

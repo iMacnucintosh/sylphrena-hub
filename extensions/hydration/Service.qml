@@ -189,6 +189,24 @@ Scope {
         root.showReminder();
     }
 
+    // `sylph ext hydration <command>` (contributes.commands in the manifest)
+    function command(name: string, args: list<string>): string {
+        if (name === "show") {
+            root.showReminder();
+            return "ok";
+        }
+        if (name === "add") {
+            const ml = parseInt(args[0] ?? "", 10);
+            if (!(ml > 0))
+                return "error: usage: sylph ext hydration add <ml>";
+            root.addMl(ml);
+            return `${root.drunkMl} / ${root.dailyGoalMl} ml`;
+        }
+        if (name === "status")
+            return `${root.drunkMl} / ${root.dailyGoalMl} ml`;
+        return `error: unknown command ${name}`;
+    }
+
     function showReminder(): void {
         root.dismissReminder();
         root.lastRemindAt = Date.now();

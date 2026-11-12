@@ -15,7 +15,21 @@
         "component": "Widget.qml"
       }
     ],
-    "settings": "Settings.qml"
+    "settings": "Settings.qml",
+    "commands": [
+      {
+        "name": "show",
+        "description": "Show the reminder now"
+      },
+      {
+        "name": "add",
+        "description": "Log water: add <ml>"
+      },
+      {
+        "name": "status",
+        "description": "What has been drunk today and the goal"
+      }
+    ]
   },
   "requires": {
     "sylphrena": ">=0.5.2"
