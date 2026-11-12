@@ -59,6 +59,9 @@ class StoreDoc(unittest.TestCase):
         self.fails({**GOOD, "screenshots": [{"file": "missing.png", "caption": "A"}]})
         self.fails({**GOOD, "screenshots": [{"file": "a.txt", "caption": "A"}]}, shots=(("a.txt", 5),))
 
+    def test_rejects_a_screenshot_name_things_would_not_show(self):
+        self.fails({**GOOD, "screenshots": [{"file": "my shot.png", "caption": "A"}]}, shots=(("my shot.png", 10),))
+
     def test_rejects_a_screenshot_that_is_too_big(self):
         self.fails(GOOD, shots=(("a.png", build.MAX_SHOT + 1),))
 

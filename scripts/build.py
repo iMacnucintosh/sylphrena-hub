@@ -90,7 +90,8 @@ def store_doc(src: Path, m: dict) -> dict | None:
     for shot in d.get("screenshots", [])[:6]:
         f = Path(str(shot.get("file", "")))
         path = folder / "screenshots" / f.name
-        if f.name != str(f) or f.suffix.lower() not in SHOT_EXT or not path.is_file():
+        # Things only accepts plain names (letters, digits, . _ -): anything else would not be shown
+        if f.name != str(f) or not re.fullmatch(r"[A-Za-z0-9._-]{1,100}", f.name) or f.suffix.lower() not in SHOT_EXT or not path.is_file():
             sys.exit(f"{where}: screenshot '{shot.get('file')}' must be an image file in store/screenshots/")
         if path.stat().st_size > MAX_SHOT:
             sys.exit(f"{where}: {f.name} is bigger than {MAX_SHOT // 1000} KB")
