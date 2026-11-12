@@ -49,9 +49,9 @@
       "name": "Hydration",
       "description": "Water intake tracker with reminders",
       "icon": "water_drop",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "apiVersion": 1,
-      "requires": ">=0.2.0",
+      "requires": ">=0.5.2",
       "system": false,
       "needs": [],
       "optional": [],
@@ -59,9 +59,9 @@
         "state:hydration.json"
       ],
       "path": "extensions/hydration",
-      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/hydration-0.1.1/hydration-0.1.1.zip",
-      "sha256": "9c9392a12be051cd21b4dd30decbfe505446f837b23167b3e64e5a7b9704c4f7",
-      "size": 9757,
+      "zip": "https://github.com/iMacnucintosh/sylphrena-hub/releases/download/hydration-0.1.2/hydration-0.1.2.zip",
+      "sha256": "f018cdf64a938d415e1650165c971c88ee00f0491ce38d1c19101aa985c737da",
+      "size": 9776,
       "i18n": {
         "es": {
           "name": "Hidratación",
