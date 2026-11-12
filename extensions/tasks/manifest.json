@@ -4,7 +4,7 @@
   "name": "Tasks",
   "description": "Checklist: create, complete and delete tasks",
   "icon": "checklist",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "apiVersion": 1,
   "contributes": {
     "service": "Service.qml",
@@ -16,7 +16,7 @@
     ]
   },
   "requires": {
-    "sylphrena": ">=0.2.0"
+    "sylphrena": ">=0.3.0"
   },
   "data": [
     "state:tasks.json"

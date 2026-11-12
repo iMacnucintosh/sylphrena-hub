@@ -13,6 +13,13 @@
   },
   "changelog": [
     {
+      "version": "0.1.2",
+      "date": "2026-11-11",
+      "changes": [
+        "Needs Sylphrena 0.3: the plural of the pending tasks is translated"
+      ]
+    },
+    {
       "version": "0.1.1",
       "date": "2026-11-11",
       "changes": [

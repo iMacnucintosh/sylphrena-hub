@@ -7,18 +7,21 @@ y el catálogo que lee **Things**.
 
 | Extensión | Qué hace |
 | --- | --- |
-| [`vpn-forticlient`](extensions/vpn-forticlient) | Añade conexiones VPN FortiClient (openfortivpn) a Nexus → Red, con códigos OTP y certificados de cliente |
+| [`tasks`](extensions/tasks) | Lista de tareas en el carrusel del dashboard |
+| [`hydration`](extensions/hydration) | Control del agua que bebes, con recordatorios |
+| [`games`](extensions/games) | Tu biblioteca de Steam en el dashboard: perfil, logros, sesiones y calendario de actividad |
+| [`vpn-forticlient`](extensions/vpn-forticlient) | Conexiones VPN FortiClient (openfortivpn) en Nexus → Red, con códigos OTP y certificados de cliente |
 
 El catálogo completo, con versiones, enlaces de descarga y `sha256`, está en [`index.json`](index.json).
 
 ## Instalar una extensión
 
-1. Descarga el zip de la última *release* de la extensión (pestaña **Releases**).
-2. En Sylphrena: **Nexus → Extensiones → Instalar desde zip → Examinar** y elige el zip.
-   Si la extensión necesita permisos de administrador, te pide la contraseña en ese momento.
-3. Queda activada al terminar.
+Con **Things** (sección **Sylphrena**): pulsa una extensión para ver su ficha (descripción, capturas, requisitos, qué toca en tu equipo y
+novedades) y después **Instalar**. Pide confirmación y, solo si la extensión necesita permisos de administrador, tu contraseña.
+Desde una terminal: `sylph ext list`, `sylph ext install <zip>` y `sylph ext remove <id> [--purge]`.
 
-Eliminarla (papelera en su tarjeta) quita también lo que instaló como administrador y sus conexiones o datos de sistema.
+Para un zip suelto: en Things, **Instalar desde zip**, o `sylph ext install <zip>`.
+Quitarla (papelera, con la casilla opcional de borrar sus ajustes y datos) elimina también lo que instaló como administrador.
 
 ## La ficha de cada extensión (`store/`)
 
@@ -43,7 +46,8 @@ Las reglas del proyecto valen también aquí:
 
 ```bash
 scripts/build.py            # genera dist/<id>-<versión>.zip y reescribe index.json
-scripts/build.py --check    # comprueba que index.json está al día (para CI)
+scripts/build.py --check    # comprueba que index.json y store/ están al día y que ninguna versión publicada cambió de zip (para CI)
+python3 -m unittest discover -s tests   # tests (validación de fichas, zips, scripts de Juegos)
 scripts/publish.sh <id>     # publica el zip como release <id>-<versión>
 ```
 

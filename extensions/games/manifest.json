@@ -4,7 +4,7 @@
   "name": "Games (Steam)",
   "description": "Steam library, achievements and play time in a dashboard tab",
   "icon": "sports_esports",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "apiVersion": 1,
   "contributes": {
     "service": "Service.qml",
@@ -19,7 +19,7 @@
     ]
   },
   "requires": {
-    "sylphrena": ">=0.2.0",
+    "sylphrena": ">=0.3.0",
     "apps": [
       "Steam, with an API key and your Steam ID in the extension's settings"
     ],
