@@ -189,6 +189,24 @@ Scope {
         root.showReminder();
     }
 
+    // `sylph ext hydration <command>` (contributes.commands in the manifest)
+    function command(name: string, args: list<string>): string {
+        if (name === "show") {
+            root.showReminder();
+            return "ok";
+        }
+        if (name === "add") {
+            const ml = parseInt(args[0] ?? "", 10);
+            if (!(ml > 0))
+                return "error: usage: sylph ext hydration add <ml>";
+            root.addMl(ml);
+            return `${root.drunkMl} / ${root.dailyGoalMl} ml`;
+        }
+        if (name === "status")
+            return `${root.drunkMl} / ${root.dailyGoalMl} ml`;
+        return `error: unknown command ${name}`;
+    }
+
     function showReminder(): void {
         root.dismissReminder();
         root.lastRemindAt = Date.now();
@@ -198,7 +216,12 @@ Scope {
         const notif = Notifs.pushLocal({
                 notificationId: "local:hydration",
                 summary: Tr.tr("Time to drink water"),
-                body: Tr.tr("%1 / %2 ml — tap an amount to log it").arg(root.drunkMl).arg(root.dailyGoalMl),
+                body: Tr.tr("Tap an amount to log it"),
+                // The day's water as the notification's progress bar, with what was drunk and the goal at its ends
+                // (Sylphrena ≥ 0.5.2)
+                localProgress: root.dailyGoalMl > 0 ? Math.min(1, root.drunkMl / root.dailyGoalMl) : 0,
+                progressFrom: `${root.drunkMl} ml`,
+                progressTo: `${root.dailyGoalMl} ml`,
                 appName: Tr.tr("Hydration"),
                 appIcon: "",
                 expireTimeout: Math.max(8000, GlobalConfig.notifs.defaultExpireTimeout),

@@ -1,6 +1,5 @@
 {
   "%1 / %2 ml": "%1 / %2 ml",
-  "%1 / %2 ml — tap an amount to log it": "%1 / %2 ml — toca una cantidad para registrarla",
   "%1 ml · reminder every %2 min": "%1 ml · recordatorio cada %2 min",
   "Daily goal": "Meta diaria",
   "Hydration": "Hidratación",
@@ -11,5 +10,6 @@
   "Reminder interval": "Intervalo de recordatorio",
   "Target water intake per day (ml)": "Cantidad de agua objetivo al día (ml)",
   "Time to drink water": "Hora de beber agua",
-  "Water intake tracker with reminders": "Control de agua con recordatorios"
+  "Water intake tracker with reminders": "Control de agua con recordatorios",
+  "Tap an amount to log it": "Toca una cantidad para registrarla"
 }
