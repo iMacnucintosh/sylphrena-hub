@@ -156,7 +156,7 @@ ClipRect {
             id: drinkBlobs
 
             color: Colours.palette.m3surfaceContainerHighest
-            smoothing: Tokens.rounding.medium
+            smoothing: drinkSlot.Tokens.rounding.medium  // through an item: a BlobGroup has no screen to read Tokens from
             cornerFill: false
 
             Behavior on color {
